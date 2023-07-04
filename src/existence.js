@@ -14,9 +14,6 @@ const exist =async(req,res) =>{
     console.log( j.address)
     const bal = await api.query.system.account(j.address)
     console.log((bal.data.free).toString())
-
-
-
   
     const unsub = await api.tx.balances
     .transfer(id, 1234500000)
