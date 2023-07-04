@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json ./
 
 RUN yarn 
-COPY / ./
+COPY . ./
 
 EXPOSE 4000
 
