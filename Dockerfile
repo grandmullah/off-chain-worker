@@ -7,8 +7,6 @@ COPY package.json ./
 RUN yarn 
 COPY . ./
 
-RUN ls 
-RUN pwd
 
 EXPOSE 4000
 
