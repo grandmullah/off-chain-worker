@@ -42,46 +42,46 @@ const requestRide = async (req,res) => {
       }).toArray();
   
       // Calculate estimated time to arrive at the pickup point based on speed
-      nearbyDrivers.forEach( async driver => {
-        const origin1 = `${(latitude)},${(longitude)}`;
-        
-        const destination1 = `${driver.location.coordinates[1]},${driver.location.coordinates[0]}`;
-        console.log('origin', origin1, )
-        const API_MAP_KEY ='AIzaSyDcuiu6dcRhtaisQJG-fQ_T2ktl2FUdObE'
-        axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin1}&mode=driving&destinations=${destination1}&key=${API_MAP_KEY}`).then((resp)=>{
-          console.log(resp.data.rows[0].elements[0])
-          const estimatedTime =  resp.data.rows[0].elements[0].duration.text
-          console.log('api')
-          return driver.estimatedTime = estimatedTime;
-         
-        }).catch(()=>{
-          const distance = calculateDistance(driver.location.coordinates[1], driver.location.coordinates[0], parseFloat(latitude), parseFloat(longitude));
-          const estimatedTime = distance / driver.speed; // Assuming driver's speed is in meters per minute
-          console.log('calc')
-          return driver.estimatedTime = estimatedTime;
-    
-        })
 
-      });
+
+      const nearbyDriversWithTime = [];
+
+      for (const driver of nearbyDrivers) {
+        const origin = `${latitude},${longitude}`;
+        const destination = `${driver.location.coordinates[1]},${driver.location.coordinates[0]}`;
   
-      
-    
-    // console.log(g)
+        try {
+          const origin1 = `${(latitude)},${(longitude)}`;
+        
+          const destination1 = `${driver.location.coordinates[1]},${driver.location.coordinates[0]}`;
+          console.log('origin', origin1, )
+          const API_MAP_KEY ='AIzaSyDcuiu6dcRhtaisQJG-fQ_T2ktl2FUdObE'
+          const response = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin1}&mode=driving&destinations=${destination1}&key=${API_MAP_KEY}`)
   
-      // // Query the drivers within a certain radius (e.g., 5 kilometers)
-      // const nearbyDrivers = await drivers.find({
-      //   location: {
-      //     $near: {
-      //       $geometry: {
-      //         type: 'Point',
-      //         coordinates: [longitude, latitude]
-      //       },
-      //       $maxDistance: 5000 // in meters
-      //     }
-      //   }
-      // }).toArray();
-     console.log(nearbyDrivers)
-      res.json(nearbyDrivers);
+          const { rows } = response.data;
+  
+          if (rows.length > 0 && rows[0].elements.length > 0 && rows[0].elements[0].status === 'OK') {
+            const { distance, duration } = rows[0].elements[0];
+            const estimatedTime = duration.text;
+  
+            nearbyDriversWithTime.push({...driver,estimatedTime});
+          } else {
+            const distance = calculateDistance(driver.location.coordinates[1], driver.location.coordinates[0], parseFloat(latitude), parseFloat(longitude));
+            const estimatedTime = distance / driver.speed; // Assuming driver's speed is in meters per minute
+            console.log('calc')
+            nearbyDriversWithTime.push({...driver,estimatedTime});
+          }
+        } catch (error) {
+          console.error('Error with Google Distance Matrix API:', error);
+        }
+      }
+      console.log(nearbyDriversWithTime)
+     
+      res.json(nearbyDriversWithTime);
+
+
+
+
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ error: 'An error occurred' });
