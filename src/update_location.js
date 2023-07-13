@@ -3,11 +3,11 @@ const  db = admin.database();
 const {client} = require('./cron')
 
 
-const updateLocation = async  (req,res) => {
+const updateLocation = async  (data) => {
 
    
     
-    const {id,location}= req.body
+    const {id,location}= data
     // console.log(id,location)
 
     try {
@@ -46,10 +46,10 @@ const b = (await jj.toArray()).length
    }
 
    drivers.createIndex( { location: "2dsphere" } )
-    res.sendStatus(200)
+    
     } catch (error) {
         console.log(error)
-        res.sendStatus(400)
+        
     }
 }
 module.exports ={

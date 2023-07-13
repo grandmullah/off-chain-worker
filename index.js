@@ -4,6 +4,7 @@ const { createServer } = require("http");
 const cors = require('cors');
 const routes = require('./controllers')
 const { Server } = require("socket.io");
+const { updateLocation } = require('./src/update_location');
 
 
 
@@ -21,6 +22,10 @@ const port = 4000
 io.on("connection", (socket) => {
   console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
   // ...
+  socket.on("update-location", (arg) => {
+     // world
+     updateLocation(arg)
+  });
 });
 
 app.use(routes)
