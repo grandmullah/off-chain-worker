@@ -2,7 +2,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const fs = require('fs');
 
-const credentials = '/home/biegon/off-chain-worker/src/X509-cert-3406721595276256674.pem'
+const credentials = '/home/collins/off-chain-worker/src/X509-cert-3406721595276256674.pem'
 
 const client = new MongoClient('mongodb+srv://cluster0.0wni5o1.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority', {
   sslKey: credentials,
