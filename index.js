@@ -1,10 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { createServer } = require("http");
 const cors = require('cors');
 const routes = require('./controllers')
+const { Server } = require("socket.io");
+
 
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer,{ /* options */ });
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
@@ -12,9 +17,15 @@ app.use(bodyParser.json())
 
 const port = 4000
 
+
+io.on("connection", (socket) => {
+  console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
+  // ...
+});
+
 app.use(routes)
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
 
