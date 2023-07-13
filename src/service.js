@@ -47,7 +47,7 @@ const requestRide = async (req,res) => {
         driver.estimatedTime = estimatedTime;
       });
   
-      res.json(nearbyDrivers);
+      
     
     // console.log(g)
   
