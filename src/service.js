@@ -42,14 +42,14 @@ const requestRide = async (req,res) => {
       }).toArray();
   
       // Calculate estimated time to arrive at the pickup point based on speed
-      nearbyDrivers.forEach( driver => {
-        const origin1 = `${parseFloat(latitude), parseFloat(longitude)}`;
+      nearbyDrivers.forEach( async driver => {
+        const origin1 = `${(latitude)},${(longitude)}`;
         
-        const destination1 = `${driver.location.coordinates[1], driver.location.coordinates[0]}`;
+        const destination1 = `${driver.location.coordinates[1]},${driver.location.coordinates[0]}`;
         console.log('origin', origin1, )
         const API_MAP_KEY ='AIzaSyDcuiu6dcRhtaisQJG-fQ_T2ktl2FUdObE'
         axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin1}&mode=driving&destinations=${destination1}&key=${API_MAP_KEY}`).then((resp)=>{
-          console.log(resp.data)
+          console.log(resp.data.rows[0].elements[0])
           const estimatedTime =  resp.data.rows[0].elements[0].duration.text
           console.log('api')
           return driver.estimatedTime = estimatedTime;
