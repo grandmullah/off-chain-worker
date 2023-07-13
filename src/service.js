@@ -25,46 +25,44 @@ const requestRide = async (req,res) => {
       // Access the drivers collection
       const drivers = db.collection('drivers');
 
-      let g = await drivers.aggregate([
-        {
-          $match: {
-              lastUpdated: {
-                  $gte: new Date(new Date().getTime() - 1000 * 60 * 20)
-              }
-          }
-      },
-      {
-        $geoNear: {
-            near: {
-                type: "Point",
-                coordinates: [longitude, latitude]
-            },
-            distanceField: "distance",
-            spherical: true
-        }
-    },
-    {
-        $addFields: {
-            eta: {
-                $divide: ["$distance", "$speed"]
-            }
-        }
-    }
-    ]).toArray()
-    console.log(g)
-  
-      // Query the drivers within a certain radius (e.g., 5 kilometers)
       const nearbyDrivers = await drivers.find({
         location: {
           $near: {
             $geometry: {
               type: 'Point',
-              coordinates: [longitude, latitude]
+              coordinates: [parseFloat(longitude), parseFloat(latitude)]
             },
             $maxDistance: 5000 // in meters
           }
+        },
+        lastUpdated: {
+          $gte: new Date(Date.now() - 20 * 60 * 1000) // 20 minutes ago
         }
       }).toArray();
+  
+      // Calculate estimated time to arrive at the pickup point based on speed
+      nearbyDrivers.forEach(driver => {
+        const distance = calculateDistance(driver.location.coordinates[1], driver.location.coordinates[0], parseFloat(latitude), parseFloat(longitude));
+        const estimatedTime = distance / driver.speed; // Assuming driver's speed is in meters per minute
+        driver.estimatedTime = estimatedTime;
+      });
+  
+      res.json(nearbyDrivers);
+    
+    // console.log(g)
+  
+      // // Query the drivers within a certain radius (e.g., 5 kilometers)
+      // const nearbyDrivers = await drivers.find({
+      //   location: {
+      //     $near: {
+      //       $geometry: {
+      //         type: 'Point',
+      //         coordinates: [longitude, latitude]
+      //       },
+      //       $maxDistance: 5000 // in meters
+      //     }
+      //   }
+      // }).toArray();
      console.log(nearbyDrivers)
       res.json(nearbyDrivers);
     } catch (error) {
