@@ -22,7 +22,8 @@ const updateLocation = async  (data) => {
       location: {
         type: 'Point',
         coordinates: [location.longitude, location.latitude]
-      }
+      },
+      speed:location.speed
     };
 
     const jj = drivers.find({driver:id} )
@@ -36,8 +37,10 @@ const b = (await jj.toArray()).length
           location: {
             type: 'Point',
             coordinates: [location.longitude, location.latitude]
-          }
+          },
+          speed:location.speed
         },
+        
         $currentDate: { lastUpdated: true }
       })
    }else{
