@@ -47,14 +47,17 @@ const requestRide = async (req,res) => {
         const destination1 = `${driver.location.coordinates[1], driver.location.coordinates[0]}`;
         const API_MAP_KEY ='AIzaSyDcuiu6dcRhtaisQJG-fQ_T2ktl2FUdObE'
         axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin1}&mode=driving&destinations=${destination1}&key=${API_MAP_KEY}`).then((resp)=>{
+          console.log(resp.data)
           const estimatedTime =  resp.data.rows[0].elements[0].duration.text
-          driver.estimatedTime = estimatedTime;
           console.log('api')
+          return driver.estimatedTime = estimatedTime;
+         
         }).catch(()=>{
           const distance = calculateDistance(driver.location.coordinates[1], driver.location.coordinates[0], parseFloat(latitude), parseFloat(longitude));
           const estimatedTime = distance / driver.speed; // Assuming driver's speed is in meters per minute
-          driver.estimatedTime = estimatedTime;
           console.log('calc')
+          return driver.estimatedTime = estimatedTime;
+    
         })
 
       });
