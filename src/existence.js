@@ -7,7 +7,7 @@ const { Keyring } = require('@polkadot/keyring');
 const exist =async(req,res) =>{
     const{id}=req.query
  try {
-    const wsProvider = new WsProvider('ws://35.232.24.147:9944');
+    const wsProvider = new WsProvider('ws://34.171.4.42:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
     const key = new Keyring({ type: 'sr25519' })
     const j = key.createFromUri('erase lucky memory ivory shiver position bleak will scrub unlock quantum direct')
