@@ -5,6 +5,7 @@ const cors = require('cors');
 const routes = require('./controllers')
 const { Server } = require("socket.io");
 const { updateLocation } = require('./src/update_location');
+const { requests } = require('./src/requests');
 
 
 
@@ -27,7 +28,7 @@ io.on("connection", (socket) => {
      updateLocation(arg)
   });
   socket.on('request',(arg)=> {
- console.log(arg)
+       requests(arg)
   })
 });
 
