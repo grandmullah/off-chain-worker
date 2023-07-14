@@ -27,8 +27,9 @@ io.on("connection", (socket) => {
      // world
      updateLocation(arg)
   });
-  socket.on('request',(arg)=> {
-       requests(arg)
+  socket.on('request',async (arg)=> {
+      const dd =  await requests(arg)
+      console.log(dd)
   })
 });
 
