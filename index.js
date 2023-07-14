@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
      // world
      updateLocation(arg)
   });
-  socket.on('reequest',(arg)=> {
+  socket.on('request',(arg)=> {
  console.log(arg)
   })
 });
