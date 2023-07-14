@@ -23,7 +23,7 @@ const requests = async (arg)=>{
         const requests = db.collection('requests');
         await requests.insertOne({
             ...arg,
-            status: waiting 
+            status: 'waiting' 
         },async (err, result) =>{
             const insertedId = result.insertedId;
 
