@@ -11,6 +11,7 @@
 
 const { client } = require("./cron");
 const { admin } = require("./firebase");
+const { ObjectId } = require('mongodb');
 
 
 
@@ -46,7 +47,7 @@ const requests = async (arg)=>{
             }),
         },
         })
-        return insertedId;
+        return insertedId.toString();;
     }catch (error) {
         console.log(error)
     }
