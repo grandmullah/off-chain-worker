@@ -21,34 +21,32 @@ const requests = async (arg)=>{
         await client.connect()
         const db = client.db('rides');   
         const requests = db.collection('requests');
-        await requests.insertOne({
+        const result = await requests.insertOne({
             ...arg,
             status: 'waiting' 
-        },async (err, result) =>{
-            const insertedId = result.insertedId;
-
-            await admin.messaging().send({
-               token: driver.device,
-            data: {
-                notifee: JSON.stringify({
-                body: {message:'This message was sent via FCM!',ID:insertedId},
-                android: {
-                    channelId: 'default',
-                    actions: [
-                    {
-                        title: 'Mark as Read',
-                        pressAction: {
-                        id: 'read',
-                        },
-                    },
-                    ],
-                },
-                }),
-            },
-            })
-            return insertedId
         })
-       
+        const insertedId = result.insertedId;
+
+        await admin.messaging().send({
+            token: driver.device,
+        data: {
+            notifee: JSON.stringify({
+            body: {message:'This message was sent via FCM!',ID:insertedId},
+            android: {
+                channelId: 'default',
+                actions: [
+                {
+                    title: 'Mark as Read',
+                    pressAction: {
+                    id: 'read',
+                    },
+                },
+                ],
+            },
+            }),
+        },
+        })
+        return insertedId;
     }catch (error) {
         console.log(error)
     }
