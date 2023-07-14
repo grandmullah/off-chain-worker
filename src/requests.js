@@ -32,7 +32,10 @@ const requests = async (arg)=>{
             token: driver.device,
         data: {
             notifee: JSON.stringify({
-            body: {message:'This message was sent via FCM!',ID:insertedId},
+            body: 'This message was sent via FCM!',
+            data:{
+                ID:insertedId.toString()
+            },
             android: {
                 channelId: 'default',
                 actions: [
