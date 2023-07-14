@@ -26,6 +26,9 @@ io.on("connection", (socket) => {
      // world
      updateLocation(arg)
   });
+  socket.on('reequest',(arg)=> {
+ console.log(arg)
+  })
 });
 
 app.use(routes)
