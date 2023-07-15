@@ -30,12 +30,12 @@ const requests = async (arg)=>{
 
         await admin.messaging().send({
             token: driver.device,
-            data: JSON.stringify({
+            data: {data:JSON.stringify({
                 type:'requests',
                 id:insertedId.toString(),
                 rider:rider,
                 details:details
-            }),
+            })},
         })
         return insertedId.toString();;
     }catch (error) {
