@@ -30,25 +30,11 @@ const requests = async (arg)=>{
 
         await admin.messaging().send({
             token: driver.device,
-        data: {
-            notifee: JSON.stringify({
-            body: 'This message was sent via FCM!',
-            data:{
-                ID:insertedId.toString()
+            data: {
+                type:'requests',
+                id:insertedId.toString(),
+                
             },
-            android: {
-                channelId: 'default',
-                actions: [
-                {
-                    title: 'Mark as Read',
-                    pressAction: {
-                    id: 'read',
-                    },
-                },
-                ],
-            },
-            }),
-        },
         })
         return insertedId.toString();;
     }catch (error) {
