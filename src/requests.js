@@ -46,10 +46,7 @@ const requests = async (arg)=>{
 }
 
 
-module.exports ={
-    requests,
-    accepted
-}
+
 
 
 
@@ -67,11 +64,16 @@ const accepted = async (rideId) =>{
             { _id: ObjectId(rideId) },
             { $set: updateData }
           );
-
+            console.log('updated')
           //send notify to rider
     } catch (error) {
         console.log(error)
     }
     
   
+}
+
+module.exports ={
+    requests,
+    accepted
 }
