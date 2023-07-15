@@ -1,2 +1,4 @@
 node_modules
 **/._*
+index.js
+src/cron.js

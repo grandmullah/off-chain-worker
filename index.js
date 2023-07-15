@@ -5,7 +5,7 @@ const cors = require('cors');
 const routes = require('./controllers')
 const { Server } = require("socket.io");
 const { updateLocation } = require('./src/update_location');
-const { requests } = require('./src/requests');
+const { requests, accepted } = require('./src/requests');
 
 
 
@@ -31,12 +31,15 @@ io.on("connection", (socket) => {
       const dd =  await requests(arg)
       console.log(dd)
   })
+  socket.on('acceptride', async (arg) =>{
+     await accepted(arg.id)
+  })
 });
 
 app.use(routes)
 
 httpServer.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
-  })
+})
 
 

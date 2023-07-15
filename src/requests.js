@@ -33,7 +33,8 @@ const requests = async (arg)=>{
             data: {
                 type:'requests',
                 id:insertedId.toString(),
-                
+                rider:rider,
+                details:details
             },
         })
         return insertedId.toString();;
@@ -46,5 +47,31 @@ const requests = async (arg)=>{
 
 
 module.exports ={
-    requests
+    requests,
+    accepted
+}
+
+
+
+const accepted = async (rideId) =>{
+    // updat 
+    // send use notificataion
+    try {
+        await client.connect()
+        const db = client.db('rides');   
+        const requests = db.collection('requests');
+        const updateData = {
+            status:'accepted'
+        }
+        const result = await requests.updateOne(
+            { _id: ObjectId(rideId) },
+            { $set: updateData }
+          );
+
+          //send notify to rider
+    } catch (error) {
+        console.log(error)
+    }
+    
+  
 }
