@@ -17,7 +17,7 @@ const { ObjectId } = require('mongodb');
 
 const requests = async (arg)=>{
     const {rider,details,driver} = arg
-
+   console.log(driver.device)
     try {
         await client.connect()
         const db = client.db('rides');   
