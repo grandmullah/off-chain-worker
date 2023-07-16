@@ -60,6 +60,8 @@ const accepted = async (rideId) =>{
         const updateData = {
             status:'accepted'
         }
+        const details = await  requests.findOne( { _id: ObjectId(rideId) })
+        console.log(details)
         const result = await requests.updateOne(
             { _id: ObjectId(rideId) },
             { $set: updateData }
