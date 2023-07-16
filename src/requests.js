@@ -65,7 +65,15 @@ const accepted = async (rideId) =>{
         const result = await requests.updateOne(
             { _id: new ObjectId(rideId) },
             { $set: updateData }
-          );
+        );
+
+        await admin.messaging().send({
+            token: details.rider.token,
+            data: {data:JSON.stringify({
+                type:'accepted',
+                id:rideId,
+            })},
+        })
             console.log('updated')
           //send notify to rider
     } catch (error) {
