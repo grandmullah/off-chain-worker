@@ -5,7 +5,7 @@ const cors = require('cors');
 const routes = require('./controllers')
 const { Server } = require("socket.io");
 const { updateLocation } = require('./src/update_location');
-const { requests, accepted, arrived } = require('./src/requests');
+const { requests, accepted, arrived, started } = require('./src/requests');
 
 
 
@@ -37,6 +37,9 @@ io.on("connection", (socket) => {
   socket.on('arrived', async (arg) =>{
     await arrived(arg)
  })
+ socket.on('started', async (arg) =>{
+  await started(arg)
+})
 
 });
 

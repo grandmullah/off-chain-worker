@@ -119,8 +119,43 @@ const arrived = async (rideId) =>{
   
 }
 
+const started = async (rideId) =>{
+    // updat 
+    // send use notificataion
+    try {
+        await client.connect()
+        const db = client.db('rides');   
+        const requests = db.collection('requests');
+        const updateData = {
+            status:'arrived'
+        }
+        const details = await  requests.findOne( { _id: new ObjectId(rideId) })
+        console.log(details)
+        const result = await requests.updateOne(
+            { _id: new ObjectId(rideId) },
+            { $set: updateData }
+        );
+
+        await admin.messaging().send({
+            token: details.rider.token,
+            data: {data:JSON.stringify({
+                type:'started',
+                id:rideId,
+                driver:details.driver
+            })},
+        })
+            console.log('updated')
+          //send notify to rider
+    } catch (error) {
+        console.log(error)
+    }
+    
+  
+}
+
 module.exports ={
     requests,
     accepted,
-    arrived
+    arrived,
+    started
 }
