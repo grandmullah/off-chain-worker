@@ -72,6 +72,42 @@ const accepted = async (rideId) =>{
             data: {data:JSON.stringify({
                 type:'accepted',
                 id:rideId,
+                driver:details.driver
+            })},
+        })
+            console.log('updated')
+          //send notify to rider
+    } catch (error) {
+        console.log(error)
+    }
+    
+  
+}
+
+
+const arrived = async (rideId) =>{
+    // updat 
+    // send use notificataion
+    try {
+        await client.connect()
+        const db = client.db('rides');   
+        const requests = db.collection('requests');
+        const updateData = {
+            status:'arrived'
+        }
+        const details = await  requests.findOne( { _id: new ObjectId(rideId) })
+        console.log(details)
+        const result = await requests.updateOne(
+            { _id: new ObjectId(rideId) },
+            { $set: updateData }
+        );
+
+        await admin.messaging().send({
+            token: details.rider.token,
+            data: {data:JSON.stringify({
+                type:'arrived',
+                id:rideId,
+                driver:details.driver
             })},
         })
             console.log('updated')
@@ -85,5 +121,6 @@ const accepted = async (rideId) =>{
 
 module.exports ={
     requests,
-    accepted
+    accepted,
+    arrived
 }
